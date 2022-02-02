@@ -1,0 +1,24 @@
+#pane{
+    -fx-background-image: url('background.jpg');
+    -fx-background-repeat: stretch;
+    -fx-background-size: 900 506;
+    -fx-background-position: center center;
+}
+
+.button-default {
+       -fx-background-color: white;
+       -fx-border-color: black;
+       -fx-border-width: 1;
+       -fx-pref-width: 250;
+       -fx-pref-height: 10;
+    }
+
+.button-onEn {
+      -fx-background-color: black;
+      -fx-border-color: black;
+      -fx-border-width: 1;
+      -fx-pref-width: 250;
+      -fx-pref-height: 10;
+      -fx-text-fill: white;
+}
+

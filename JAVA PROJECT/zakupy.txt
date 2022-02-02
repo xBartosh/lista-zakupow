@@ -1,0 +1,6 @@
+Vegetables:
+tutaj jakis owoc
+
+Fruits:
+jablko
+

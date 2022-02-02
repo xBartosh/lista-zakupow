@@ -1,8 +1,7 @@
+import ShoppingArt.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -10,31 +9,26 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.awt.*;
-import java.awt.TextArea;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class Controls extends Application {
 
     // lista do zapisywania
     static List<String> list = new ArrayList<>();
     // buttons
-    public Button b0, b1, b2, b3, b4, b5, b6, b7, sort, clear;
+    public Button b0, b1, b2, b3, b4, b5, b6, b7, b8, sort, clear;
     // text field
     TextField textField = new TextField();
     // checker
@@ -43,6 +37,8 @@ public class Controls extends Application {
     static Label label;
     // scene
     Scene scene1;
+    // textfield
+    static TextArea textArea;
 
     public static void main(String[] args) {
         launch(args);
@@ -89,28 +85,28 @@ public class Controls extends Application {
     public void whichOne() {
         switch (which) {
             case 0:
-                Owoce owoce = new Owoce(textField.getText());
+                Fruits fruits = new Fruits(textField.getText());
                 break;
             case 1:
-                Warzywa warzywa = new Warzywa(textField.getText());
+                Vegetables vegetables = new Vegetables(textField.getText());
                 break;
             case 2:
-                Pieczywo pieczywo = new Pieczywo(textField.getText());
+                Baking baking = new Baking(textField.getText());
                 break;
             case 3:
-                Nabial nabial = new Nabial(textField.getText());
+                Dairy dairy = new Dairy(textField.getText());
                 break;
             case 4:
-                Mieso mieso = new Mieso(textField.getText());
+                Meat meat = new Meat(textField.getText());
                 break;
             case 5:
-                Chemia chemia = new Chemia(textField.getText());
+                Chemicals chemicals = new Chemicals(textField.getText());
                 break;
             case 6:
-                Slodycze slodycze = new Slodycze(textField.getText());
+                Sweets sweets = new Sweets(textField.getText());
                 break;
             case 7:
-                Inne inne = new Inne(textField.getText());
+                Others others = new Others(textField.getText());
                 break;
 
             default:
@@ -118,119 +114,125 @@ public class Controls extends Application {
         }
     }
 
-    public static void zapisz() {
-        Warzywa warzywa = new Warzywa();
-        Owoce owoce = new Owoce();
-        Mieso mieso = new Mieso();
-        Pieczywo pieczywo = new Pieczywo();
-        Chemia chemia = new Chemia();
-        Nabial nabial = new Nabial();
-        Inne inne = new Inne();
-        Slodycze slodycze = new Slodycze();
+    public static void save() {
+        Vegetables vegetables = new Vegetables();
+        Fruits fruits = new Fruits();
+        Meat meat = new Meat();
+        Baking baking = new Baking();
+        Chemicals chemicals = new Chemicals();
+        Dairy dairy = new Dairy();
+        Others others = new Others();
+        Sweets sweets = new Sweets();
 
         try {
-            PrintWriter zapis = new PrintWriter("zakupy.txt");
+            PrintWriter printWriter = new PrintWriter("zakupy.txt");
 
-            if (pieczywo.zbierzListe().size() == 0) {
+            if (baking.getList().size() == 0) {
             } else {
-                zapis.println("Pieczywo:");
-                for (int i = 0; i < pieczywo.zbierzListe().size(); i++) {
-                    zapis.println(pieczywo.zbierzListe().get(i));
+                baking.sortListAlf(baking.getList());
+                printWriter.println("Baking:");
+                for (int i = 0; i < baking.getList().size(); i++) {
+                    printWriter.println(baking.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
 
-            if (warzywa.zbierzListe().size() == 0) {
+            if (vegetables.getList().size() == 0) {
             } else {
-                zapis.println("Warzywa:");
-                for (int i = 0; i < warzywa.zbierzListe().size(); i++) {
-                    zapis.println(warzywa.zbierzListe().get(i));
+                vegetables.sortListAlf(vegetables.getList());
+                printWriter.println("Vegetables:");
+                for (int i = 0; i < vegetables.getList().size(); i++) {
+                    printWriter.println(vegetables.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
 
-            if (owoce.zbierzListe().size() == 0) {
+            if (fruits.getList().size() == 0) {
             } else {
-                zapis.println("Owoce:");
-                for (int i = 0; i < owoce.zbierzListe().size(); i++) {
-                    zapis.println(owoce.zbierzListe().get(i));
+                fruits.sortListAlf(fruits.getList());
+                printWriter.println("Fruits:");
+                for (int i = 0; i < fruits.getList().size(); i++) {
+                    printWriter.println(fruits.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
 
-            if (mieso.zbierzListe().size() == 0) {
+            if (meat.getList().size() == 0) {
             } else {
-                zapis.println("Mieso: ");
-                for (int i = 0; i < mieso.zbierzListe().size(); i++) {
-                    zapis.println(mieso.zbierzListe().get(i));
+                meat.sortListAlf(meat.getList());
+                printWriter.println("Meat:");
+                for (int i = 0; i < meat.getList().size(); i++) {
+                    printWriter.println(meat.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
 
-            if (nabial.zbierzListe().size() == 0) {
+            if (dairy.getList().size() == 0) {
             } else {
-                zapis.println("Nabial:");
-                for (int i = 0; i < nabial.zbierzListe().size(); i++) {
-                    zapis.println(nabial.zbierzListe().get(i));
+                dairy.sortListAlf(dairy.getList());
+                printWriter.println("Dairy:");
+                for (int i = 0; i < dairy.getList().size(); i++) {
+                    printWriter.println(dairy.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
 
-            if (chemia.zbierzListe().size() == 0) {
+            if (chemicals.getList().size() == 0) {
             } else {
-                zapis.println("Chemia:");
-                for (int i = 0; i < chemia.zbierzListe().size(); i++) {
-                    zapis.println(chemia.zbierzListe().get(i));
+                chemicals.sortListAlf(chemicals.getList());
+                printWriter.println("Chemicals:");
+                for (int i = 0; i < chemicals.getList().size(); i++) {
+                    printWriter.println(chemicals.getList().get(i));
                 }
-                zapis.println();
+                printWriter.println();
             }
-            if (slodycze.zbierzListe().size() == 0) {
+            if (sweets.getList().size() == 0) {
             } else {
-                zapis.println("Slodycze:");
-                for (int i = 0; i < slodycze.zbierzListe().size(); i++) {
-                    zapis.println(slodycze.zbierzListe().get(i));
+                sweets.sortListAlf(sweets.getList());
+                printWriter.println("Sweets:");
+                for (int i = 0; i < sweets.getList().size(); i++) {
+                    printWriter.println(sweets.getList().get(i));
                 }
-                zapis.println();
-            }
-
-            if (inne.zbierzListe().size() == 0) {
-            } else {
-                zapis.println("Inne:");
-                for (int i = 0; i < inne.zbierzListe().size(); i++) {
-                    zapis.println(inne.zbierzListe().get(i));
-                }
-                zapis.println();
+                printWriter.println();
             }
 
+            if (others.getList().size() == 0) {
+            } else {
+                others.sortListAlf(others.getList());
+                printWriter.println("Others:");
+                for (int i = 0; i < others.getList().size(); i++) {
+                    printWriter.println(others.getList().get(i));
+                }
+                printWriter.println();
+            }
 
-            zapis.close();
+            printWriter.close();
 
         } catch (FileNotFoundException e) {
             System.out.println("Error!");
         }
     }
 
-    public static void sczytaj() {
-        if (label.getText().isEmpty()) {
+    public static void load() {
+        if (textArea.getText().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("ERROR");
             alert.setContentText("First there must be something in the label to sort it!");
             alert.showAndWait();
         } else {
-            zapisz();
+            save();
             try {
                 FileReader fileReader = new FileReader("zakupy.txt");
                 BufferedReader bufferedReader = new BufferedReader(fileReader);
                 String line;
-                label.setText("");
+                textArea.setText("");
                 while ((line = bufferedReader.readLine()) != null) {
-                    if (label.getText().isEmpty()) {
-                        label.setText("    " + line + "\n");
+                    if (textArea.getText().isEmpty()) {
+                        textArea.setText("    " + line + "\n");
                     } else {
-                        label.setText(label.getText() + "    " + line + "\n");
+                        textArea.setText(textArea.getText() + "    " + line + "\n");
                     }
                 }
-
                 bufferedReader.close();
 
             } catch (FileNotFoundException e) {
@@ -243,52 +245,33 @@ public class Controls extends Application {
 
     }
 
-    public static void wyczysc() {
-        Warzywa warzywa = new Warzywa();
-        Owoce owoce = new Owoce();
-        Mieso mieso = new Mieso();
-        Pieczywo pieczywo = new Pieczywo();
-        Chemia chemia = new Chemia();
-        Nabial nabial = new Nabial();
-        Inne inne = new Inne();
-        Slodycze slodycze = new Slodycze();
+    public static void clear() {
+        Vegetables vegetables = new Vegetables();
+        Fruits fruits = new Fruits();
+        Meat meat = new Meat();
+        Baking baking = new Baking();
+        Chemicals chemicals = new Chemicals();
+        Dairy dairy = new Dairy();
+        Others others = new Others();
+        Sweets sweets = new Sweets();
 
-        warzywa.wyczyscListe();
-        owoce.wyczyscListe();
-        mieso.wyczyscListe();
-        pieczywo.wyczyscListe();
-        chemia.wyczyscListe();
-        nabial.wyczyscListe();
-        inne.wyczyscListe();
-        slodycze.wyczyscListe();
+        vegetables.clearList();
+        fruits.clearList();
+        meat.clearList();
+        baking.clearList();
+        chemicals.clearList();
+        dairy.clearList();
+        others.clearList();
+        sweets.clearList();
 
-        label.setText("");
-        zapisz();
+        textArea.setText("");
+        save();
 
     }
 
 
     @Override
     public void start(Stage primaryStage) {
-
-        // label
-        label = new Label();
-        label.setLayoutY(50);
-        label.setLayoutX(500);
-        label.setPrefSize(350, 500);
-        label.setStyle("-fx-border-width: 2;\n" +
-                "-fx-border-color: #000000;" +
-                " -fx-border-radius: 18 18 18 18;" +
-                "-fx-background-radius: 18;" +
-                "-fx-background-color: #ffffff;");
-
-
-        label.setWrapText(true);
-        label.setTextAlignment(TextAlignment.LEFT);
-        label.setAlignment(Pos.TOP_LEFT);
-        label.maxHeight(500);
-        label.maxWidth(350);
-
 
         // textfield
         textField.setStyle(
@@ -303,14 +286,13 @@ public class Controls extends Application {
 
         // textfield on enter
         textField.setOnAction(e -> {
-            if (label.getText().isEmpty()) {
+            if (textArea.getText().isEmpty()) {
                 whichOne();
-                label.setText("    " + textField.getText() + "\n");
+                textArea.setText("    " + textField.getText() + "\n");
             } else {
                 whichOne();
-                label.setText(label.getText() + "    " + textField.getText() + "\n");
+                textArea.setText(textArea.getText() + "    " + textField.getText() + "\n");
             }
-
             list.add(textField.getText());
             textField.clear();
         });
@@ -319,6 +301,14 @@ public class Controls extends Application {
             @Override
             public void handle(MouseEvent event) {
                 scene1.setCursor(Cursor.HAND);
+                Button button = new Button();
+                button = (Button) event.getSource();
+                if(button.getText().equals("Sort") || button.getText().equals("Clear")){
+                }else{
+                    button.getStyleClass().add("button-onEn");
+                }
+
+
             }
         };
 
@@ -326,92 +316,98 @@ public class Controls extends Application {
             @Override
             public void handle(MouseEvent event) {
                 scene1.setCursor(Cursor.DEFAULT);
+                Button button = new Button();
+                button = (Button) event.getSource();
+                if(button.getText().equals("Sort") || button.getText().equals("Clear")){
+                }else {
+                    button.getStyleClass().remove("button-onEn");
+                    button.getStyleClass().add("button-default");
+                }
+
             }
         };
+
         // buttons
         b0 = new Button("Fruits");
-        b0.setPrefSize(100, 100);
         b0.setLayoutY(50);
         b0.setLayoutX(10);
-        b0.setContentDisplay(ContentDisplay.CENTER);
         b0.setOnAction(myHandler);
         b0.setOnMouseEntered(mouseEn);
         b0.setOnMouseExited(mouseEx);
 
 
         b1 = new Button("Vegetables");
-        b1.setPrefSize(100, 100);
-        b1.setLayoutY(50);
-        b1.setLayoutX(110);
-        b1.setContentDisplay(ContentDisplay.CENTER);
+        b1.setLayoutY(80);
+        b1.setLayoutX(10);
         b1.setOnAction(myHandler);
         b1.setOnMouseEntered(mouseEn);
         b1.setOnMouseExited(mouseEx);
 
         b2 = new Button("Baking");
-        b2.setPrefSize(100, 100);
-        b2.setLayoutY(50);
-        b2.setLayoutX(210);
+        b2.setLayoutY(110);
+        b2.setLayoutX(10);
         b2.setOnAction(myHandler);
         b2.setOnMouseEntered(mouseEn);
         b2.setOnMouseExited(mouseEx);
 
         b3 = new Button("Dairy");
-        b3.setPrefSize(100, 100);
-        b3.setLayoutY(150);
-        b3.setLayoutX(210);
+        b3.setLayoutY(140);
+        b3.setLayoutX(10);
         b3.setOnAction(myHandler);
         b3.setOnMouseEntered(mouseEn);
         b3.setOnMouseExited(mouseEx);
 
         b4 = new Button("Meat");
-        b4.setPrefSize(100, 100);
-        b4.setLayoutY(150);
+        b4.setLayoutY(170);
         b4.setLayoutX(10);
         b4.setOnAction(myHandler);
         b4.setOnMouseEntered(mouseEn);
         b4.setOnMouseExited(mouseEx);
 
         b5 = new Button("Chemicals");
-        b5.setPrefSize(100, 100);
-        b5.setLayoutY(150);
-        b5.setLayoutX(110);
+        b5.setLayoutY(200);
+        b5.setLayoutX(10);
         b5.setOnAction(myHandler);
         b5.setOnMouseEntered(mouseEn);
         b5.setOnMouseExited(mouseEx);
 
         b6 = new Button("Others");
-        b6.setPrefSize(100, 100);
-        b6.setLayoutY(250);
-        b6.setLayoutX(110);
+        b6.setLayoutY(290);
+        b6.setLayoutX(10);
         b6.setOnAction(myHandler);
         b6.setOnMouseEntered(mouseEn);
         b6.setOnMouseExited(mouseEx);
 
         b7 = new Button("Candies");
-        b7.setPrefSize(100, 100);
-        b7.setLayoutY(250);
+        b7.setLayoutY(260);
         b7.setLayoutX(10);
         b7.setOnAction(myHandler);
         b7.setOnMouseEntered(mouseEn);
         b7.setOnMouseExited(mouseEx);
 
+        b8 = new Button("Drinks");
+        b8.setLayoutY(230);
+        b8.setLayoutX(10);
+        b8.setOnAction(myHandler);
+        b8.setOnMouseEntered(mouseEn);
+        b8.setOnMouseExited(mouseEx);
+
         clear = new Button("Clear");
         clear.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                if (label.getText().isEmpty()) {
+                if (textArea.getText().isEmpty()) {
                     Alert alert = new Alert(Alert.AlertType.ERROR);
                     alert.setHeaderText("ERROR");
                     alert.setContentText("There is nothing to clear!");
                     alert.showAndWait();
                 } else {
-                    wyczysc();
+                    clear();
                 }
 
             }
         });
-        clear.setLayoutX(650);
+        clear.setLayoutX(480);
         clear.setLayoutY(555);
         clear.setPickOnBounds(true);
         clear.setPrefSize(50, 35);
@@ -419,72 +415,73 @@ public class Controls extends Application {
         clear.setOnMouseExited(mouseEx);
 
         sort = new Button("Sort");
+        sort.setLayoutX(422);
         sort.setLayoutY(555);
-        sort.setLayoutX(590);
         sort.setPrefSize(50, 35);
         sort.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                sczytaj();
+                load();
             }
         });
         sort.setOnMouseEntered(mouseEn);
         sort.setOnMouseExited(mouseEx);
 
-        // Textfield
-        TextField textField1 = new TextField();
-        textField1.setEditable(false);
-        textField1.setLayoutX(500);
-        textField1.setLayoutY(50);
-        textField1.setPrefSize(350,500);
-        textField1.setAlignment(Pos.TOP_LEFT);
-        textField1.setStyle("-fx-border-width: 2;\n" +
+        // TextArea
+        textArea = new TextArea();
+        textArea.setEditable(false);
+        textArea.setLayoutX(320);
+        textArea.setLayoutY(50);
+        textArea.setWrapText(true);
+        textArea.setPrefSize(350,500);
+        textArea.setStyle("-fx-border-width: 1;\n" +
                 "-fx-border-color: #000000;" +
-                //" -fx-border-radius: 18 18 18 18;" +
                 "-fx-background-radius: 18;" +
                 "-fx-background-color: #ffffff;");
 
+        Stream.of(b0, b1, b2, b3, b4, b5, b6, b7, b8).forEach(button ->
+                button.getStyleClass().add("button-default"));
 
-
+        // ScrollPane
         ScrollPane scrollPane = new ScrollPane();
-        scrollPane.setContent(textField1);
-        scrollPane.setLayoutX(500);
+        scrollPane.setContent(textArea);
+        scrollPane.setLayoutX(320);
         scrollPane.setLayoutY(50);
-        scrollPane.setPrefSize(350, 500);
+        scrollPane.setPrefSize(351, 502);
         scrollPane.setFitToWidth(true);
-
-
 
         // Imageview
         ImageView saveImg = new ImageView("saveImg.png");
         saveImg.setPickOnBounds(true);
-        saveImg.setLayoutX(710);
+        saveImg.setLayoutX(537);
         saveImg.setLayoutY(555);
         saveImg.setFitHeight(35);
         saveImg.setPreserveRatio(true);
 
+        // Img
+        Image image = new Image("background.jpg");
+        BackgroundImage backgroundImage = new BackgroundImage(image, null, null, null, null);
+
         // group
         Group group = new Group();
         group.getChildren().add(textField);
-        //group.getChildren().add(label);
-        group.getChildren().addAll(b0, b1, b2, b3, b4, b5, b6, b7, clear, sort, saveImg);
-        group.getChildren().add(textField1);
+        group.getChildren().addAll(b0, b1, b2, b3, b4, b5, b6, b7, b8, clear, sort, saveImg);
+        group.getChildren().add(textArea);
         group.getChildren().add(scrollPane);
 
+
         // scene
-        scene1 = new Scene(group, 880, 600);
+        scene1 = new Scene(group, 700, 600);
         scene1.setFill(Color.web("#ffffff"));
-        scene1.getStylesheets().add("mystyles.css");
+        scene1.getStylesheets().add("my-style.css");
 
         // stage
         primaryStage.setScene(scene1);
-        //primaryStage.setResizable(false);
+        primaryStage.setResizable(false);
         primaryStage.setTitle(("Shopping list"));
         primaryStage.show();
 
-
         // handlers
-        // img
         saveImg.setOnMouseEntered(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -497,18 +494,16 @@ public class Controls extends Application {
                 scene1.setCursor(Cursor.DEFAULT);
             }
         });
-
-
         saveImg.setOnMouseClicked(new EventHandler<javafx.scene.input.MouseEvent>() {
             @Override
             public void handle(javafx.scene.input.MouseEvent event) {
-                if (label.getText().isEmpty()) {
+                if (textArea.getText().isEmpty()) {
                     Alert alert1 = new Alert(Alert.AlertType.ERROR);
                     alert1.setHeaderText("ERROR");
                     alert1.setContentText("You cannot save an empty list!");
                     alert1.showAndWait();
                 } else {
-                    zapisz();
+                    save();
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.getDialogPane().setContentText("");
                     alert.getDialogPane().setHeaderText("Zapisano!");
@@ -517,11 +512,7 @@ public class Controls extends Application {
 
             }
         });
-
-
     }
-
-    ;
 
 
 }
